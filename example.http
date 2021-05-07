@@ -1,0 +1,63 @@
+GET http://192.168.0.101:8080/api/v1/product
+
+###################
+
+POST http://192.168.0.101:8080/api/v1/product/post HTTP/1.1
+content-type: multipart/form-data; boundary=----XXXXX
+------XXXXX
+content-disposition: form-data; name=""
+
+{"filename": "1.jpg","price": "100","color": "red","origin": "this is origin","standard": "this is standard","description": "This is decrption","type": "bracelet"}
+------XXXXX
+content-disposition: form-data; name="imageUrl"; filename="1.jpg"
+content-type: image/jpg
+
+< ./1.jpg
+------XXXXX--
+###################
+
+POST /api/v1/product/post HTTP/1.1
+Host: 192.168.0.101:8080
+Content-Length: 892
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="filename"
+
+1.jpg
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="price"
+
+100
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="color"
+
+red
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="origin"
+
+this is origin
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="standard"
+
+this is standard
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+This is decrption
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+bracelet
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="imageUrl"; filename="/C:/Users/ASUS/Downloads/ecommerce-pictures/1.jpg"
+Content-Type: image/jpeg
+
+< ./1.jpg
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+
+
+###################
+
+GET https://e-commerce-ct-backend.herokuapp.com/api/v1/product

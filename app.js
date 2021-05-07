@@ -6,9 +6,10 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 const os = require("os");
+const fs = require("fs");
 
 const networkInterfaces = os.networkInterfaces();
-const ip = networkInterfaces.Ethernet[1].address;
+const ip = networkInterfaces['Wi-Fi'][1].address;
 //config
 require("dotenv/config");
 

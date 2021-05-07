@@ -31,8 +31,11 @@ const product_get = (req, res) => {
 };
 
 const product_post = (req, res) => {
+  console.log("=======");
   const host = process.env.HOST_NAME;
   const filename = req.body.filename.replace(/ +/g, "");
+  console.log("-->",req.body);
+  console.log("-->",req.file);
   if (!req.body || !req.file) {
     return res.status(200).send({
       status: "ERR_REQUEST",

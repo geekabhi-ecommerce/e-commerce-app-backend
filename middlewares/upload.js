@@ -6,6 +6,7 @@ const storage = multer.diskStorage({
     cb(null, "./public/api/static/images/productPictures");
   },
   filename: function (req, file, cb) {
+    console.log(req.body);
     cb(null, req.body.filename.replace(/ +/g, "") + ".jpg");
   },
 });
