@@ -6,9 +6,8 @@ const registerSchema = new Schema({
     type: String,
     required: true,
   },
-  email: {
+  phonenumber: {
     type: String,
-    lowercase: true,
     required: true,
   },
   password: {

@@ -20,6 +20,7 @@ const order_get = (req, res) => {
       });
     })
     .catch((err) => {
+      console.log(err);
       return res.status(400).send({
         status: "ERR_SERVER",
         message: err.message,
@@ -41,8 +42,8 @@ const order_post = async (req, res) => {
     });
   }
   let content = {
-    title: "Cập nhật đơn hàng",
-    body: `Đơn hàng của bạn đã được đặt thành công.`,
+    title: "Order updates",
+    body: `Your order has been successfully placed.`,
   };
 
   const order = new Order(req.body.orderInfo);
@@ -76,6 +77,7 @@ const order_post = async (req, res) => {
       content: resOrder,
     });
   } catch (err) {
+    console.log(err);
     return res.status(400).send({
       status: "ERR_SERVER",
       message: err.message,
@@ -94,8 +96,8 @@ const order_update = async (req, res) => {
     });
   }
   let content = {
-    title: "Cập nhật đơn hàng",
-    body: `Đơn hàng ${id.substr(id.length - 10)} đã được ${updateStatus}.`,
+    title: "Order updates",
+    body: `Order ${id.substr(id.length - 10)} was ${updateStatus}.`,
   };
   try {
     const resOrder = await Order.findByIdAndUpdate(id, {

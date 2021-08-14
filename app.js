@@ -13,6 +13,8 @@ const ip = networkInterfaces['Wi-Fi'][1].address;
 //config
 require("dotenv/config");
 
+console.log(process.env);
+
 //import routes
 const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");

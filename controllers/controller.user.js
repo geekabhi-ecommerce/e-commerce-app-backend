@@ -19,18 +19,20 @@ const user_register = async (req, res) => {
   //validation
   const { error } = registerValidation(req.body);
   if (error) {
+    console.log(error);
     return res.status(400).send(error.details[0].message);
   }
-  //check email if exist
-  const emailExist = await User.findOne({ email: req.body.email });
-  if (emailExist) {
-    return res.status(400).send({ err: 'The email already exists' });
+  //check phonenumber if exist
+  const phoneExist = await User.findOne({ phonenumber: req.body.phonenumber });
+  if (phoneExist) {
+    console.log(phoneExist);
+    return res.status(400).send({ err: 'The phone number already exists' });
   }
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(req.body.password, salt);
   const user = new User({
     name: req.body.name,
-    email: req.body.email.toLowerCase(),
+    phonenumber: req.body.phonenumber,
     password: hashedPassword,
     pushTokens: req.body.pushTokens,
     phone: '',
@@ -51,13 +53,14 @@ const user_register = async (req, res) => {
     sendEmail();
     res.status(200).json(resUser);
   } catch (err) {
+    console.log(err);
     res.status(400).send(err);
   }
 };
 
 const user_login = async (req, res) => {
   const { error } = loginValidation(req.body);
-  const email = req.body.email.toLowerCase();
+  const phonenumber = req.body.phonenumber;
   const { password } = req.body;
   const pushTokens = req.body.pushTokens;
 
@@ -66,7 +69,7 @@ const user_login = async (req, res) => {
   }
   //admin login
   if (
-    email === process.env.DEFAULT_ADMINNAME &&
+    phonenumber === process.env.DEFAULT_ADMINNAME &&
     password === process.env.DEFAULT_PASSWORD
   ) {
     jwt.sign(
@@ -87,13 +90,13 @@ const user_login = async (req, res) => {
     );
   } else {
     //user account
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ phonenumber });
     if (!user) {
-      return res.status(400).send({ err: 'Email or password is wrong' });
+      return res.status(400).send({ err: 'Phone number or password is wrong' });
     }
     const passMatching = await bcrypt.compare(password, user.password);
     if (!passMatching) {
-      return res.status(400).send({ err: 'Email or password is wrong' });
+      return res.status(400).send({ err: 'Phone number or password is wrong' });
     }
     let checkPushToken;
     if (pushTokens.length > 0) {
@@ -115,11 +118,12 @@ const user_login = async (req, res) => {
           if (err) {
             return res.status(400).err;
           }
+          console.log("user response-->", user)
           return res.status(200).send({
             userid: user._id,
             name: user.name,
             password,
-            email: user.email,
+            phonenumber: user.phonenumber,
             phone: user.phone,
             address: user.address,
             profilePicture: user.profilePicture,
@@ -171,21 +175,21 @@ const user_photoUpload = (req, res) => {
 };
 
 const user_resetpw = async (req, res) => {
-  const email = req.body.email.toLowerCase();
-  if (!email) {
-    return res.status(400).send({ err: 'Email is wrong' });
+  const phonenumber = req.body.phonenumber.toLowerCase();
+  if (!phonenumber) {
+    return res.status(400).send({ err: 'Phone number is wrong' });
   }
   let user;
   try {
-    user = await User.findOne({ email });
+    user = await User.findOne({ phonenumber });
   } catch (err) {
-    res.status(404).send({ err: 'Email is not exist' });
+    res.status(404).send({ err: 'Phone number does not exist' });
   }
   const token = usePasswordHashToMakeToken(user);
   const url = getPasswordResetURL(user, token);
-  const emailTemplate = resetPasswordTemplate(user, url);
+  const phonenumberTemplate = resetPasswordTemplate(user, url);
   const sendEmail = () => {
-    transporter.sendMail(emailTemplate, (err, info) => {
+    transporter.sendMail(phonenumberTemplate, (err, info) => {
       if (err) {
         res.status(500).send({ err: 'Error sending email' });
       } else {
